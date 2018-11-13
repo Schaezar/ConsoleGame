@@ -6,25 +6,25 @@ using System.Threading.Tasks;
 
 namespace Engine
 {
-    public class Player
+    public class Player : Entity
     {
-        private static CoOrds position;
+        private string name;
 
-        internal static CoOrds Position { get => position; set => position = value; }
+        public string Name { get => name; set => name = value; }
 
-        public Player(int x, int y)
+        public Player(string name, Vector2 pos) : base (pos)
         {
-            position.X = x;
-            position.Y = y;
+            Name = name;
+            Position = pos;
         }
 
         public void MovePlayer(int moveX, int moveY)
         {
-            Console.SetCursorPosition(position.X, position.Y);
+            Console.SetCursorPosition(Position.X, Position.Y);
             Console.Write(" ");
-            position.ChangeCoOrds(moveX, moveY);
-            Console.SetCursorPosition(position.X, position.Y);
-            Console.Write("X");
+            Position.Modify(moveX, moveY);
+            Console.SetCursorPosition(Position.X, Position.Y);
+            Console.Write("@");
         }
     }
 }

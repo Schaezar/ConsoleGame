@@ -9,11 +9,6 @@ using Engine;
 
 namespace ConsoleGame
 {
-    public struct Position
-    {
-
-    }
-
     class Program
     {
         static void Main()
@@ -21,7 +16,8 @@ namespace ConsoleGame
             Console.CursorVisible = false;
 
             bool isValid = true;
-            Player player = new Player(5, 5);
+            Vector2 startPos = new Vector2(50, 10);
+            Player player = new Player("Ragnar", startPos);
 
             do
             {

@@ -6,23 +6,23 @@ using System.Threading.Tasks;
 
 namespace Engine
 {
-    struct CoOrds
+    public struct Vector2
     {
         private int x, y;
 
         public int X { get => x; set => x = value; }
         public int Y { get => y; set => y = value; }
 
-        public CoOrds(int xAxis, int yAxis)
+        public Vector2(int xAxis, int yAxis)
         {
             x = xAxis;
             y = yAxis;
         }
 
-        public void ChangeCoOrds(int x, int y)
+        public void Modify(int xMod, int yMod)
         {
-            X += x;
-            Y += y;
+            x += xMod;
+            x += yMod;
         }
     }
 }
