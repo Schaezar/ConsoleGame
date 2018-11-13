@@ -5,32 +5,13 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ConsoleApp1
+using Engine;
+
+namespace ConsoleGame
 {
     public struct Position
     {
-        int X;
-        int Y;
 
-        public int x { get => X; set => X = value; }
-        public int y { get => Y; set => Y = value; }
-
-        public Position(int x, int y)
-        {
-            X = x;
-            Y = y;
-        }
-
-        public void ChangePosition(int x, int y)
-        {
-            X += x;
-            Y += y;
-        }
-    }
-
-    static class Player
-    {
-        public static Position position = new Position(9, 9);
     }
 
     class Program
@@ -40,6 +21,7 @@ namespace ConsoleApp1
             Console.CursorVisible = false;
 
             bool isValid = true;
+            Player player = new Player(5, 5);
 
             do
             {
@@ -51,25 +33,25 @@ namespace ConsoleApp1
                 {
                     case ConsoleKey.A:
                         {
-                            MovePlayer(-1, 0);
+                            player.MovePlayer(-1, 0);
                             break;
                         }
 
                     case ConsoleKey.W:
                         {
-                            MovePlayer(0, -1);
+                            player.MovePlayer(0, -1);
                             break;
                         }
 
                     case ConsoleKey.D:
                         {
-                            MovePlayer(1, 0);
+                            player.MovePlayer(1, 0);
                             break;
                         }
 
                     case ConsoleKey.S:
                         {
-                            MovePlayer(0, 1);
+                            player.MovePlayer(0, 1);
                             break;
                         }
                 }
@@ -77,15 +59,6 @@ namespace ConsoleApp1
             } while (isValid);
 
             Console.ReadKey(true);
-        }
-
-        static void MovePlayer(int x, int y)
-        {
-            Console.SetCursorPosition(Player.position.x, Player.position.y);
-            Console.Write(" ");
-            Player.position.ChangePosition(x, y);
-            Console.SetCursorPosition(Player.position.x, Player.position.y);
-            Console.Write("X");
         }
     }
 }
