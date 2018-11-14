@@ -8,9 +8,16 @@ namespace Engine
 {
     public static class UI
     {
-        public static void DrawEntity()
+        public static void EraseEntity(Entity ent)
         {
-            
+            Console.SetCursorPosition(ent.Position.X, ent.Position.Y);
+            Console.Write(' ');
+        }
+
+        public static void DrawEntity(Entity ent, char ascii)
+        {
+            Console.SetCursorPosition(ent.Position.X, ent.Position.Y);
+            Console.Write(ascii);
         }
     }
 }

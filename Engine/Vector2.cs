@@ -8,21 +8,13 @@ namespace Engine
 {
     public struct Vector2
     {
-        private int x, y;
-
-        public int X { get => x; set => x = value; }
-        public int Y { get => y; set => y = value; }
+        public int X { get; set; }
+        public int Y { get; set; }
 
         public Vector2(int xAxis, int yAxis)
         {
-            x = xAxis;
-            y = yAxis;
-        }
-
-        public void Modify(int xMod, int yMod)
-        {
-            x += xMod;
-            x += yMod;
+            X = xAxis;
+            Y = yAxis;
         }
     }
 }

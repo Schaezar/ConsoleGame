@@ -19,6 +19,8 @@ namespace ConsoleGame
             Vector2 startPos = new Vector2(50, 10);
             Player player = new Player("Ragnar", startPos);
 
+            UI.DrawEntity(player, player.Ascii);
+
             do
             {
                 isValid = true;

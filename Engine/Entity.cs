@@ -8,13 +8,11 @@ namespace Engine
 {
     public abstract class Entity
     {
-        private Vector2 position;
+        public Vector2 Position { get; set; }
 
         public Entity(Vector2 pos)
         {
             Position = pos;
         }
-
-        public Vector2 Position { get => position; set => position = value; }
     }
 }
