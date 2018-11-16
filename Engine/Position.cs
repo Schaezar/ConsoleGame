@@ -6,15 +6,21 @@ using System.Threading.Tasks;
 
 namespace Engine
 {
-    public struct Vector2
+    public struct Position
     {
         public int X { get; set; }
         public int Y { get; set; }
 
-        public Vector2(int xAxis, int yAxis)
+        public Position(int xCoord, int yCoord)
         {
-            X = xAxis;
-            Y = yAxis;
+            X = xCoord;
+            Y = yCoord;
+        }
+
+        public void ModifyPosition(int xMod, int yMod)
+        {
+            X = xMod;
+            Y = yMod;
         }
     }
 }

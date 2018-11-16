@@ -16,13 +16,12 @@ namespace ConsoleGame
             Console.CursorVisible = false;
 
             bool isValid = true;
-            Vector2 startPos = new Vector2(50, 10);
-            Player player = new Player("Ragnar", startPos);
+            Player player = new Player("Ragnar", 50, 10);
 
             UI.Initialize();
             UI.DrawEntity(player, player.Ascii);
-            UI.DrawGameBorders();
-            UI.DrawPlayerUI(player);
+            //UI.DrawGameBorders();
+            //UI.DrawPlayerUI(player);
 
             do
             {

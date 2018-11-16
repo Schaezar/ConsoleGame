@@ -8,11 +8,17 @@ namespace Engine
 {
     public abstract class Entity
     {
-        public Vector2 Position { get; set; }
+        protected Position _position;
 
-        public Entity(Vector2 pos)
+        public Position Position
         {
-            Position = pos;
+            get { return _position; }
+        }
+
+        public void SetPosition(int x, int y)
+        {
+            _position.X = x;
+            _position.Y = y;
         }
     }
 }

@@ -20,17 +20,18 @@ namespace Engine
         public int Level { get; } = 12;
         public string CurrentJob { get; set; } = "Warrior";
 
-        public Player(string name, Vector2 pos) : base (pos)
+        public Player(string name, int x, int y)
         {
             Name = name;
-            Position = pos;
+            _position.X = x;
+            _position.Y = y;
             Ascii = '@';
         }
 
         public void MovePlayer(int xMod, int yMod)
         {
             UI.EraseEntity(this);
-            Position = new Vector2(Position.X + xMod, Position.Y + yMod);
+            SetPosition(_position.X+xMod, _position.Y+yMod);
             UI.DrawEntity(this, Ascii);
         }
     }
