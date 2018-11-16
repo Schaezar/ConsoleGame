@@ -19,7 +19,10 @@ namespace ConsoleGame
             Vector2 startPos = new Vector2(50, 10);
             Player player = new Player("Ragnar", startPos);
 
+            UI.Initialize();
             UI.DrawEntity(player, player.Ascii);
+            UI.DrawGameBorders();
+            UI.DrawPlayerUI(player);
 
             do
             {
