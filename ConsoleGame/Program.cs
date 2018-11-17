@@ -11,54 +11,94 @@ namespace ConsoleGame
 {
     class Program
     {
+        enum States { Init, Exploration, Menu, Battle, Idle };
+
+        static Player player;
+
+        static States currState;
+
         static void Main()
         {
-            Console.CursorVisible = false;
+            Position startPos = new Position(50, 10);
+            player = new Player("Ragnar", startPos);
 
-            bool isValid = true;
-            Player player = new Player("Ragnar", 50, 10);
-
-            UI.Initialize();
-            UI.DrawEntity(player, player.Ascii);
-            //UI.DrawGameBorders();
-            //UI.DrawPlayerUI(player);
+            bool isValid;
+            bool gameOver = false;
 
             do
             {
-                isValid = true;
-                ConsoleKeyInfo keyInfo;
-                keyInfo = Console.ReadKey(true);
-
-                switch (keyInfo.Key)
+                switch (currState)
                 {
-                    case ConsoleKey.A:
+                    case States.Init:
                         {
-                            player.MovePlayer(-1, 0);
+                            UI.Initialize();
+                            UI.DrawEntity(player, player.Ascii, UI.FORE_WHITE);
+                            UI.DrawGameBorders();
+                            UI.DrawPlayerUI(player);
+                            currState = States.Exploration;
                             break;
                         }
-
-                    case ConsoleKey.W:
+                    case States.Exploration:
                         {
-                            player.MovePlayer(0, -1);
+                            UI.DrawPlayerUI(player);
+                            isValid = ParseCommand();
                             break;
                         }
-
-                    case ConsoleKey.D:
-                        {
-                            player.MovePlayer(1, 0);
+                    case States.Menu:
+                        {                          
+                            currState = States.Battle;
                             break;
                         }
-
-                    case ConsoleKey.S:
+                    case States.Battle:
                         {
-                            player.MovePlayer(0, 1);
+                            currState = States.Idle;
+                            break;
+                        }
+                    case States.Idle:
+                        {
+                            currState = States.Exploration;
                             break;
                         }
                 }
+            } while (!gameOver);
+        }
 
-            } while (isValid);
+        static bool ParseCommand()
+        {
+            ConsoleKeyInfo keyInfo;
+            keyInfo = Console.ReadKey(true);
 
-            Console.ReadKey(true);
+            switch (keyInfo.Key)
+            {
+                case ConsoleKey.A:
+                    {
+                        player.MovePlayer(-1, 0);
+                        return true;
+                    }
+
+                case ConsoleKey.W:
+                    {
+                        player.MovePlayer(0, -1);
+                        return true;
+                    }
+
+                case ConsoleKey.D:
+                    {
+                        player.MovePlayer(1, 0);
+                        return true;
+                    }
+
+                case ConsoleKey.S:
+                    {
+                        player.MovePlayer(0, 1);
+                        return true;
+                    }
+                default:
+                    {
+                        UI.WriteToInfoArea("This is not a valid command");
+                        return false;
+                    }
+            }
         }
     }
 }

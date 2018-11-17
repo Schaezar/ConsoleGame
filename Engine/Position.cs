@@ -16,11 +16,5 @@ namespace Engine
             X = xCoord;
             Y = yCoord;
         }
-
-        public void ModifyPosition(int xMod, int yMod)
-        {
-            X = xMod;
-            Y = yMod;
-        }
     }
 }
