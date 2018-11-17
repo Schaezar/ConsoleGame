@@ -46,7 +46,7 @@ namespace Engine
         {
             if (dest.Y <= UI.MAP_TOP_BRDR-1 || dest.X >= UI.MAP_RIGHT_BRDR || dest.Y >= UI.MAP_BOTTOM_BRDR || dest.X <= UI.MAP_LEFT_BRDR)
             {
-                UI.WriteToInfoArea("You cannot move there");
+                UI.WriteToInfoArea(UI.MapInfoArea, "You cannot move there", UI.FORE_WARNING);
                 return false;
             }
             return true;

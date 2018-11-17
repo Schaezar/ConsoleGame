@@ -8,29 +8,35 @@ namespace Engine
 {
     public static class UI
     {
-        private const int CONSOLE_WIDTH = 160;
-        private const int CONSOLE_HEIGHT = 57;
+        const int CONSOLE_WIDTH = 160;
+        const int CONSOLE_HEIGHT = 57;
 
-        private const string TITLE = "Console RPG";
-        private const string HORIZ_DASH_LINE = " --------------------------------------------------------------------------------" +
+        const string TITLE = "Console RPG";
+        const string HORIZ_DASH_LINE = " --------------------------------------------------------------------------------" +
                                                "------------------------------------------------------------------------------";
-        private const string HORIZ_SOLID_LINE = "____________________________________________________________" +
+        const string HORIZ_SOLID_LINE = "____________________________________________________________" +
                                                 "___________________________________________________________";
 
-        public const int MAP_TOP_BRDR = 3;
-        public const int MAP_RIGHT_BRDR = 159;
-        public const int MAP_BOTTOM_BRDR = 45;
-        public const int MAP_LEFT_BRDR = 0;
+        const int BATTLE_TOP_BRDR = 3;
+        const int BATTLE_LEFT_OUTER_BRDR = 0;
+        const int BATTLE_LEFT_INNER_BRDR = 19;
+        const int BATTLE_RIGHT_INNER_BRDR = 139;
+        const int BATTLE_RIGHT_OUTER_BRDR = 159;
+        const int BATTLE_BOTTOM_BRDR = 45;
 
-        static Position top_player_ui_border = new Position(0, 0);
-        static Position player_ui_info_line = new Position(0, 1);
-        static Position bottom_player_ui_border = new Position(0, 2);
-
+        static Position player_ui_top_border = new Position(0, 0);
         static Position player_ui_name = new Position(10, 1);
         static Position player_ui_hp = new Position(47, 1);
         static Position player_ui_mp = new Position(77, 1);
         static Position player_ui_xp = new Position(107, 1);
         static Position player_ui_lvl = new Position(140, 1);
+
+        static Position battle_ui_separator = new Position(20, 45);
+
+        public const int MAP_TOP_BRDR = 3;
+        public const int MAP_RIGHT_BRDR = 159;
+        public const int MAP_BOTTOM_BRDR = 45;
+        public const int MAP_LEFT_BRDR = 0;
 
         public const ConsoleColor FORE_DEFAULT = ConsoleColor.Gray;
         public const ConsoleColor FORE_WHITE = ConsoleColor.White;
@@ -40,9 +46,8 @@ namespace Engine
         public const ConsoleColor FORE_SUCCESS = ConsoleColor.Green;
         public const ConsoleColor FORE_MAGIC = ConsoleColor.Magenta;
 
-        public static int CurrentConsoleLine = 46;
-
-        public static List<string> UIBuffer = new List<string>();
+        public static InfoArea MapInfoArea = new InfoArea(46, 56, 0, 11, 56);
+        public static InfoArea BattleInfoArea = new InfoArea(6, 34, 21, 28, 34);
 
         public static void Initialize()
         {
@@ -67,9 +72,8 @@ namespace Engine
         public static void DrawPlayerUI(Player player)
         {
 
-            Console.SetCursorPosition(top_player_ui_border.X, top_player_ui_border.Y);
+            Console.SetCursorPosition(player_ui_top_border.X, player_ui_top_border.Y);
             Console.WriteLine(HORIZ_DASH_LINE);
-            Console.SetCursorPosition(player_ui_info_line.X, player_ui_info_line.Y);
             UI.FillLine(' ');
 
             Console.SetCursorPosition(player_ui_name.X, player_ui_name.Y);
@@ -86,6 +90,26 @@ namespace Engine
 
             Console.SetCursorPosition(player_ui_lvl.X, player_ui_lvl.Y);
             Console.WriteLine($"LVL : {player.Level}");
+
+            Console.Write(HORIZ_DASH_LINE);
+        }
+
+        public static void DrawBattleScreen()
+        {
+            for (int i = BATTLE_TOP_BRDR; i < BATTLE_BOTTOM_BRDR; i++)
+            {
+                Console.SetCursorPosition(BATTLE_LEFT_OUTER_BRDR, i);
+                Console.WriteLine('|');
+                Console.SetCursorPosition(BATTLE_LEFT_INNER_BRDR, i);
+                Console.WriteLine('|');
+                Console.SetCursorPosition(BATTLE_RIGHT_INNER_BRDR, i);
+                Console.WriteLine('|');
+                Console.SetCursorPosition(BATTLE_RIGHT_OUTER_BRDR, i);
+                Console.WriteLine('|');
+            }
+            Console.SetCursorPosition(battle_ui_separator.X, battle_ui_separator.Y);
+            Console.WriteLine(HORIZ_SOLID_LINE);
+            Console.SetCursorPosition(BATTLE_BOTTOM_BRDR, BATTLE_BOTTOM_BRDR);
             Console.WriteLine(HORIZ_DASH_LINE);
         }
 
@@ -103,16 +127,49 @@ namespace Engine
             Console.Write(' ');
         }
 
-        public static void ClearMessageBox()
+        public static void WriteToInfoArea(InfoArea infoArea, string message, ConsoleColor color)
         {
-            for (int iy = 46; iy < 57; iy++)
+            Line line = new Line(message, color);
+
+            if (infoArea.Buffer.Count >= infoArea.MaxBufferLength)
             {
-                Console.SetCursorPosition(0, iy);
-                UI.FillLine(' ');
+                infoArea.Buffer.RemoveAt(infoArea.Buffer.Count - 1);
+                infoArea.Buffer.Insert(0, line);
+                infoArea.ClearBox();
+
+                for (int i = 0; i < infoArea.Buffer.Count; i++)
+                {
+                    Console.SetCursorPosition(0, (infoArea.MaxLine - i));
+                    Console.ForegroundColor = infoArea.Buffer[i].Color;
+                    Console.WriteLine(infoArea.Buffer[i].Content);
+                }
             }
+            else
+            {
+                Console.SetCursorPosition(infoArea.LeftMargin, infoArea.CurrConsoleLine);
+                infoArea.Buffer.Add(line);
+                for (int i = 0; i < infoArea.Buffer.Count; i++)
+                {
+                    Console.SetCursorPosition(0, (infoArea.MaxLine - i));
+                    Console.ForegroundColor = infoArea.Buffer[i].Color;
+                    Console.WriteLine(infoArea.Buffer[i].Content);
+                }
+                infoArea.CurrConsoleLine--;
+            }
+            Console.ResetColor();
         }
 
-        public static void FillLine(char character, int length = 160)
+        public static void WriteBattleInstructions()
+        {
+            Console.SetCursorPosition(21, 3);
+            Console.WriteLine("Choose a command to execute by typing the corresponding letter.");
+            Console.SetCursorPosition(21, 4);
+            Console.WriteLine("(a) to attack / (s) to cast a spell / (i) for items / (r) to run away");
+            Console.SetCursorPosition(21, 5);
+            Console.WriteLine("------------------------------------------------------------------------------------");
+        }
+
+        public static void FillLine(char character, int length = CONSOLE_WIDTH)
         {
             string completeText = string.Empty;
 
@@ -122,34 +179,6 @@ namespace Engine
             }
 
             Console.Write(completeText);
-        }
-
-        public static void WriteToInfoArea(string mess)
-        {
-            if (CurrentConsoleLine >= 57)
-            {
-                UIBuffer.RemoveAt(10);
-                UIBuffer.Insert(0, mess);
-                ClearMessageBox();
-
-                for (int i = 0; i < UIBuffer.Count; i++)
-                {
-                    Console.SetCursorPosition(0, (46 + i));
-                    Console.WriteLine(UIBuffer[i]);
-                }
-            }
-            else
-            {
-                ClearMessageBox();
-                Console.SetCursorPosition(0, CurrentConsoleLine);
-                UIBuffer.Add(mess);
-                for (int i = 0; i < UIBuffer.Count; i++)
-                {
-                    Console.SetCursorPosition(0, (46 + i));
-                    Console.WriteLine(UIBuffer[i]);
-                }
-                CurrentConsoleLine++;
-            }
         }
     }
 }

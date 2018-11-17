@@ -95,7 +95,7 @@ namespace ConsoleGame
                     }
                 default:
                     {
-                        UI.WriteToInfoArea("This is not a valid command");
+                        UI.WriteToInfoArea(UI.MapInfoArea, "This is not a valid command", UI.FORE_WARNING);
                         return false;
                     }
             }
