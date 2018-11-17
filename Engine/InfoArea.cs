@@ -27,9 +27,9 @@ namespace Engine
 
         public void ClearBox()
         {
-            for (int i = MinLine; i < MaxLine; i++)
+            for (int i = MinLine; i <= MaxLine; i++)
             {
-                Console.SetCursorPosition(LeftMargin, i);
+                Console.SetCursorPosition(LeftMargin, i + 1);
                 UI.FillLine(' ');
             }
         }

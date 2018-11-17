@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,9 @@ namespace ConsoleGame
 {
     class Program
     {
+        Stopwatch myStopwatch = new Stopwatch();
+        
+
         enum States { Init, Exploration, Menu, Battle, Idle };
 
         static Player player;

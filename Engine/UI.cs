@@ -146,6 +146,7 @@ namespace Engine
             }
             else
             {
+                infoArea.ClearBox();
                 Console.SetCursorPosition(infoArea.LeftMargin, infoArea.CurrConsoleLine);
                 infoArea.Buffer.Add(line);
                 for (int i = 0; i < infoArea.Buffer.Count; i++)
