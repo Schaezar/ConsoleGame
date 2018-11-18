@@ -12,7 +12,6 @@ namespace ConsoleGame
 {
     class Program
     {
-        //This is a new comment
         Stopwatch myStopwatch = new Stopwatch();
         
 
